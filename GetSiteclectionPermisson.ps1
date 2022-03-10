@@ -6,8 +6,36 @@
 #	Copyright: Copyright (C) 2020 Sonorite Co.,LTD. All rights reserved.
 #	Update History:
 #  0.01 2022.03.03 作成開始
+#  0.02 2022.03.0  引数変更
+#  .\Get_SiteCollectionPermisson.ps1 -url "http://sonorite-sps19/sites/test101"  -ReportFile "F:\work\PermisosErreius-test101.htm"
 #  
 ###############################################################################
+
+
+    Param
+    (
+        # 権限出力対象サイトコレクションURL
+        [Parameter(Mandatory=$true, 
+                   ParameterSetName='Permissionreport')]
+        [string]$url,
+
+        #出力レポートのファイル名
+        [Parameter(Mandatory=$true,
+                    ParameterSetName='Permissionreport')]
+        [string]$ReportFile
+    )
+
+if([string]::IsNullorEmpty($url))
+{
+ Write-Host "対象URLは設定されておりません" 
+ exit
+ }
+if([string]::IsNullorEmpty($ReportFile))
+{
+ Write-Host "出力ファイルは設定されておりません" 
+ exit
+ }
+
 
 
 Add-PSSnapin Microsoft.SharePoint.PowerShell -ErrorAction SilentlyContinue
@@ -276,9 +304,11 @@ Write-host "`n Permission report generated successfully at "$OutputReport
  
 #**********Configuration Variables************
 
-$OutputReport = "F:\work\PermisosErreius" + (Get-Random 1000) + ".htm"
+#$OutputReport = "F:\work\PermisosErreius" + (Get-Random 1000) + ".htm"
+$OutputReport = $ReportFile
 New-Item $OutputReport -ItemType file
-$SiteCollURL="http://sonorite-sps19/sites/test101"
+#$SiteCollURL="http://sonorite-sps19/sites/test101"
+$SiteCollURL= $url
 $ScanFolders=$false
 $ScanItemLevel=$True
  
