@@ -6,8 +6,9 @@
 #	Copyright: Copyright (C) 2020 Sonorite Co.,LTD. All rights reserved.
 #	Update History:
 #  0.01 2022.03.03 作成開始
-#  0.02 2022.03.0  引数変更
+#  0.02 2022.03.09  引数変更
 #  .\Get_SiteCollectionPermisson.ps1 -url "http://sonorite-sps19/sites/test101"  -ReportFile "F:\work\PermisosErreius-test101.htm"
+#  0.03 2022.03.14  制限つきアクセス権限の非表示
 #  
 ###############################################################################
 
@@ -100,7 +101,10 @@ Function Get-Permissions([Microsoft.SharePoint.SPRoleAssignmentCollection]$RoleA
             #Exclude "Limited Access" - We don't need it sal.
             if($RoleDefinition.Name -ne "Limited Access")
             {
-                $UserPermissions += $RoleDefinition.Name +";"
+                if ($RoleDefinition.Name -ne "制限付きアクセス")
+                {
+                     $UserPermissions += $RoleDefinition.Name +";"
+                }
             }   
         }
          
