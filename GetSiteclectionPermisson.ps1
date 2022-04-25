@@ -9,6 +9,7 @@
 #  0.02 2022.03.09  引数変更
 #  .\Get_SiteCollectionPermisson.ps1 -url "http://sonorite-sps19/sites/test101"  -ReportFile "F:\work\PermisosErreius-test101.htm"
 #  0.03 2022.03.14  制限つきアクセス権限の非表示
+#  0.04 2022.05.25  制限つきアクセスグループの非表示
 #  
 ###############################################################################
 
@@ -111,26 +112,30 @@ Function Get-Permissions([Microsoft.SharePoint.SPRoleAssignmentCollection]$RoleA
         if($UserPermissions)
         {
             #*** Get  User/Group Name *****#
-            $UserGroupName=$RoleAssignment.Member.Name
-            $UserName=$RoleAssignment.Member.LoginName 
-            #**** Get User/Group Type ***** Is it a User or Group (SharePoint/AD)?
-            #Is it a AD Domain Group?
-            If($RoleAssignment.Member.IsDomainGroup)
+            #$UserGroupName=$RoleAssignment.Member.Name
+            if($RoleAssignment.Member.Name -ne "Limited Access System Group")
+            {
+                $UserGroupName=$RoleAssignment.Member.Name
+                $UserName=$RoleAssignment.Member.LoginName 
+                #**** Get User/Group Type ***** Is it a User or Group (SharePoint/AD)?
+                #Is it a AD Domain Group?
+                If($RoleAssignment.Member.IsDomainGroup)
+                    {
+                       $Type="Domain Group"
+                    }
+                #Is it a SharePoint Group?           
+                Elseif($RoleAssignment.Member.GetType() -eq [Microsoft.SharePoint.SPGroup])
                 {
-                   $Type="Domain Group"
+                     $Type="SharePoint Group"
                 }
-            #Is it a SharePoint Group?           
-            Elseif($RoleAssignment.Member.GetType() -eq [Microsoft.SharePoint.SPGroup])
-            {
-                 $Type="SharePoint Group"
+                #it a SharePoint User Account
+                else
+                {
+                       $Type="User"
+                }
+                #Send the Data to Report
+                " <tr> <td> $($UserGroupName) </td><td> $($Type) </td><td> $($UserName) </td><td>  $($UserPermissions)</td></tr>" >> $OutputReport
             }
-            #it a SharePoint User Account
-            else
-            {
-                   $Type="User"
-            }
-            #Send the Data to Report
-            " <tr> <td> $($UserGroupName) </td><td> $($Type) </td><td> $($UserName) </td><td>  $($UserPermissions)</td></tr>" >> $OutputReport
         }
     }
 }
