@@ -231,11 +231,14 @@ Function Generate-PermissionRpt()
                 "<b>Group Users</b><table class='altrowstable' id='alternatecolor' cellpadding='5px'><tr>" >>$OutputReport
                 foreach($WebRoleAssignment in $WebGroupRoleAssignments)
                 {
-                    "<th colspan='3'><b>Group:</b> $($WebRoleAssignment.Member.Name)</th></tr> " >> $OutputReport
-                    foreach($user in $WebRoleAssignment.member.users)
+                    if($($WebRoleAssignment.Member.Name) -ne "Limited Access System Group")
                     {
-                        #Send the Data to Log file
-                        " <tr> <td> $($user.Name) </td><td> $($user.LoginName) </td><td> $($user.Email)</td><tr>" >> $OutputReport
+                        "<th colspan='3'><b>Group:</b> $($WebRoleAssignment.Member.Name)</th></tr> " >> $OutputReport
+                        foreach($user in $WebRoleAssignment.member.users)
+                        {
+                            #Send the Data to Log file
+                            " <tr> <td> $($user.Name) </td><td> $($user.LoginName) </td><td> $($user.Email)</td><tr>" >> $OutputReport
+                        }
                     }
                 }
             }
