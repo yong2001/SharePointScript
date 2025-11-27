@@ -14,7 +14,7 @@ SharePoint Server 2019 と SharePoint Server サブスクリプション エデ�
       Distributed Cache	SharePoint Caching Service (SPCache)
 
 上記に列挙したサービスの停止/再起動手順は、スクリプトを使用して自動化できます。便宜上、必要な操作を実行するサンプルスクリプトを作成しました：
-https://github.com/stefangossner/Install-SPSE_Fix/blob/main/Install-SPSE_Fix.ps1
+GetSiteclectionPermisson.ps1
 
 このスクリプトには2つのパラメータがあります：
 
